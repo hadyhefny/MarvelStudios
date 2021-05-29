@@ -3,7 +3,8 @@ package com.hefny.hady.marvelstudios.utils
 import java.math.BigInteger
 import java.security.MessageDigest
 /**
- * This class is responsible for generating hash codes using timestamp, private and public api keys (*required by Marvel Api*)
+ * This class is responsible for generating hash codes using timestamp, private and public api keys
+ * (*required by Marvel Api*)
  */
 class MD5HashGenerator {
     companion object{

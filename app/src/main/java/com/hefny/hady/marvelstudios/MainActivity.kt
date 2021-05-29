@@ -1,11 +1,9 @@
 package com.hefny.hady.marvelstudios
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.hefny.hady.marvelstudios.utils.Resource
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -15,19 +13,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val viewModelFactory = MainViewModelFactory(ServiceLocator.getMarvelApi())
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        Log.d(TAG, "onCreate: viewmodel instance: ${viewModel.hashCode()}")
         viewModel.charactersLiveData.observe(this, { dataResource ->
-            when (dataResource) {
-                is Resource.Loading -> {
-                    Log.d(TAG, "onCreate: loading")
-                }
-                is Resource.Success -> {
-                    Log.d(TAG, "onCreate: success: ${dataResource.data}")
-                }
-                is Resource.Error -> {
-                    Log.d(TAG, "onCreate: error: ${dataResource.message}")
-                }
+            // handle loading
+            showProgress(dataResource.loading)
+            // handle success
+            dataResource.data?.peekContent()?.results?.let { charactersList ->
+                Log.d(TAG, "onCreate: $charactersList")
+            }
+            // handle error
+            dataResource.error?.getContentIfNotHandled()?.let { errorMessage ->
+                Log.d(TAG, "onCreate: error: $errorMessage")
             }
         })
+    }
+
+    private fun showProgress(isLoading: Boolean) {
+        // TODO("show and hide progress dialog")
+        Log.d(TAG, "showProgress: $isLoading")
     }
 }

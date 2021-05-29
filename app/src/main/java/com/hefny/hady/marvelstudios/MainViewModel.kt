@@ -29,7 +29,7 @@ class MainViewModel(private val marvelApi: MarvelApi) : ViewModel() {
     }
 
     private fun getCharacters() {
-        _characterMutableLiveData.value = Resource.Loading()
+        _characterMutableLiveData.value = Resource.loading(true)
         marvelApi.getCharacters()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -39,13 +39,13 @@ class MainViewModel(private val marvelApi: MarvelApi) : ViewModel() {
                 }
 
                 override fun onSuccess(t: MainResponse?) {
-                    _characterMutableLiveData.value = Resource.Success(t?.data)
+                    _characterMutableLiveData.value = Resource.data(t?.data)
                 }
 
                 override fun onError(e: Throwable?) {
                     Log.e(TAG, "onError: ", e)
                     val errorResponse: ErrorResponse = ErrorUtils.parseError(e)
-                    _characterMutableLiveData.value = Resource.Error(errorResponse.message)
+                    _characterMutableLiveData.value = Resource.error(errorResponse.message)
                 }
             })
     }
