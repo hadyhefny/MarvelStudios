@@ -8,7 +8,9 @@ data class Character(
     @SerializedName("name")
     val name: String,
     @SerializedName("description")
-    val description: String
+    val description: String,
+    @SerializedName("thumbnail")
+    val thumbnail: Thumbnail
 //    @SerializedName("comics")
 //    val comics: ArrayList<Comic>
 //    @SerializedName("stories")
