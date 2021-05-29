@@ -13,8 +13,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
-            .get(MainViewModel::class.java)
+        val viewModelFactory = MainViewModelFactory(ServiceLocator.getMarvelApi())
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        Log.d(TAG, "onCreate: viewmodel instance: ${viewModel.hashCode()}")
         viewModel.charactersLiveData.observe(this, { dataResource ->
             when (dataResource) {
                 is Resource.Loading -> {

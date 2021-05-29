@@ -1,6 +1,6 @@
 package com.hefny.hady.marvelstudios.utils
 
-import com.hefny.hady.marvelstudios.api.ServiceGenerator
+import com.hefny.hady.marvelstudios.ServiceLocator
 import com.hefny.hady.marvelstudios.api.responses.ErrorResponse
 import okhttp3.ResponseBody
 import retrofit2.Converter
@@ -14,7 +14,7 @@ class ErrorUtils {
     companion object {
         fun parseError(t: Throwable?): ErrorResponse {
             val converter: Converter<ResponseBody, ErrorResponse> =
-                ServiceGenerator.getInstance()
+                ServiceLocator.getRetrofitInstance()
                     .responseBodyConverter(ErrorResponse::class.java, arrayOfNulls<Annotation>(0))
             var errorResponse = ErrorResponse(0, "Something went wrong, please try again")
             when (t) {

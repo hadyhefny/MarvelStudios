@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hefny.hady.marvelstudios.api.ServiceGenerator
+import com.hefny.hady.marvelstudios.api.MarvelApi
 import com.hefny.hady.marvelstudios.api.responses.CharacterDataContainerResponse
 import com.hefny.hady.marvelstudios.api.responses.ErrorResponse
 import com.hefny.hady.marvelstudios.api.responses.MainResponse
@@ -16,7 +16,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val marvelApi: MarvelApi) : ViewModel() {
     private val disposable = CompositeDisposable()
     private var _characterMutableLiveData =
         MutableLiveData<Resource<CharacterDataContainerResponse>>()
@@ -30,7 +30,7 @@ class MainViewModel : ViewModel() {
 
     private fun getCharacters() {
         _characterMutableLiveData.value = Resource.Loading()
-        ServiceGenerator.marvelApi.getCharacters()
+        marvelApi.getCharacters()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : SingleObserver<MainResponse> {
