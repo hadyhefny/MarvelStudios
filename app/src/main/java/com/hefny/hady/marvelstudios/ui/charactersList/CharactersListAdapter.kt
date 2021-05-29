@@ -6,8 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.CenterInside
-import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.hefny.hady.marvelstudios.R
@@ -31,7 +29,7 @@ class CharactersListAdapter :
         return charactersList.size
     }
 
-    fun setCharacters(characters: ArrayList<Character>){
+    fun setCharacters(characters: ArrayList<Character>) {
         charactersList = characters
         notifyDataSetChanged()
     }
@@ -42,8 +40,11 @@ class CharactersListAdapter :
             requestOptions = requestOptions.transform(CenterCrop(), RoundedCorners(60))
             Glide.with(itemView.context)
                 .load(character.thumbnail.getImageUrl())
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
                 .apply(requestOptions)
                 .into(itemView.character_image_imageview)
+
             itemView.character_name_textview.setText(character.name)
         }
     }

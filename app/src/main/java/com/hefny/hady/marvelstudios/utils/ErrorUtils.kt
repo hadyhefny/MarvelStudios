@@ -16,7 +16,7 @@ class ErrorUtils {
             val converter: Converter<ResponseBody, ErrorResponse> =
                 ServiceLocator.getRetrofitInstance()
                     .responseBodyConverter(ErrorResponse::class.java, arrayOfNulls<Annotation>(0))
-            var errorResponse = ErrorResponse(0, "Something went wrong, please try again")
+            var errorResponse = ErrorResponse(0, ErrorMessages.SOMETHING_WENT_WRONG)
             when (t) {
                 is HttpException -> {
                     try {
@@ -26,11 +26,11 @@ class ErrorUtils {
                             }
                         }
                     } catch (e: IOException) {
-                        return ErrorResponse(0, "Check your internet connection")
+                        return ErrorResponse(0, ErrorMessages.INTERNET_CONNECTION_ERROR)
                     }
                 }
                 is IOException -> {
-                    errorResponse = ErrorResponse(0, "Check your internet connection")
+                    errorResponse = ErrorResponse(0, ErrorMessages.INTERNET_CONNECTION_ERROR)
                 }
             }
             return errorResponse
