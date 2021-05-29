@@ -14,4 +14,8 @@ data class CharacterDataContainerResponse(
     val count: Int,
     @SerializedName("results")
     val results: ArrayList<Character>
-)
+) {
+    fun getNextOffset(): Int {
+        return offset + 20
+    }
+}

@@ -5,14 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hefny.hady.marvelstudios.R
+import com.hefny.hady.marvelstudios.api.responses.ErrorResponse
 import com.hefny.hady.marvelstudios.ui.BaseFragment
+import com.hefny.hady.marvelstudios.utils.ErrorUtils
 import kotlinx.android.synthetic.main.fragment_characters_list.*
 
-class CharactersListFragment : BaseFragment() {
+class CharactersListFragment : BaseFragment(), CharactersPagingAdapter.CharacterClickListener {
     private val TAG = "AppDebug"
-    private lateinit var charactersAdapter: CharactersListAdapter
+    private lateinit var pagingAdapter: CharactersPagingAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,26 +28,45 @@ class CharactersListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: viewmodel hash: ${viewModel.hashCode()}")
         initRecyclerview()
-        viewModel.charactersLiveData.observe(viewLifecycleOwner, { dataResource ->
-            // handle loading
-            loadingStateListener.showLoadingState(dataResource.loading)
-            // handle success
-            dataResource.data?.peekContent()?.results?.let { charactersList ->
-                Log.d(TAG, "onCreate: $charactersList")
-                charactersAdapter.setCharacters(charactersList)
-            }
-            // handle error
-            dataResource.error?.getContentIfNotHandled()?.let { errorMessage ->
-                Log.d(TAG, "onCreate: error: $errorMessage")
-            }
+        // handle success
+        viewModel.getPagingCharacters().observe(viewLifecycleOwner, {
+            pagingAdapter.submitData(this.lifecycle, it)
         })
+        pagingAdapter.addLoadStateListener { loadStates ->
+            // handle different loading states (error, loading) when first loading the list
+            when (loadStates.refresh) {
+                is LoadState.Loading -> loadingStateListener.showLoadingState(true)
+                is LoadState.NotLoading -> loadingStateListener.showLoadingState(false)
+                is LoadState.Error -> {
+                    loadingStateListener.showLoadingState(false)
+                    val errorResponse: ErrorResponse =
+                        ErrorUtils.parseError((loadStates.refresh as LoadState.Error).error)
+                    Log.d(TAG, "onViewCreated: errorMessage: ${errorResponse.message}")
+                }
+            }
+//            // handle different loading states (error, loading) when try to paginate
+//            when (loadStates.append) {
+//                is LoadState.Loading -> loadingStateListener.showLoadingState(true)
+//                is LoadState.NotLoading -> loadingStateListener.showLoadingState(false)
+//                is LoadState.Error -> {
+//                    loadingStateListener.showLoadingState(false)
+//                    val errorResponse: ErrorResponse =
+//                        ErrorUtils.parseError((loadStates.append as LoadState.Error).error)
+//                    Log.d(TAG, "onViewCreated: errorMessage: ${errorResponse.message}")
+//                }
+//            }
+        }
     }
 
     private fun initRecyclerview() {
         characters_recyclerview.run {
             layoutManager = LinearLayoutManager(requireContext())
-            charactersAdapter = CharactersListAdapter()
-            adapter = charactersAdapter
+            pagingAdapter = CharactersPagingAdapter(this@CharactersListFragment)
+            adapter = pagingAdapter
         }
+    }
+
+    override fun onCharacterCLicked(position: Int) {
+        Log.d(TAG, "onCharacterCLicked: clicked $position")
     }
 }

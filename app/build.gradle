@@ -57,9 +57,9 @@ dependencies {
     // paging library
     def paging_version = "3.0.0"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
-    // RxJava2 support
+    // RxJava3 support
     implementation "androidx.paging:paging-rxjava3:$paging_version"
-    // RxJava2 and RxAndroid
+    // RxJava3 and RxAndroid
     def rxjava_version = "3.0.0"
     implementation "io.reactivex.rxjava3:rxandroid:$rxjava_version"
     implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"

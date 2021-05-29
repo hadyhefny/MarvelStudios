@@ -1,19 +1,18 @@
 package com.hefny.hady.marvelstudios.ui
 
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.hefny.hady.marvelstudios.R
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), LoadingStateListener {
-    private val TAG = "AppDebug"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
 
     override fun showLoadingState(isLoading: Boolean) {
-        // TODO("show and hide progress dialog")
-        Log.d(TAG, "showProgress: $isLoading")
+        progressDialog.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }
