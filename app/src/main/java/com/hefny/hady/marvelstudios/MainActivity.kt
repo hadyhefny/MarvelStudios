@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.hefny.hady.marvelstudios.utils.Resource
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -15,8 +16,17 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(MainViewModel::class.java)
         viewModel.charactersLiveData.observe(this, { dataResource ->
-            Log.d(TAG, "onCreate: ${dataResource.data}")
-            Log.d(TAG, "onCreate: message: ${dataResource.message}")
+            when (dataResource) {
+                is Resource.Loading -> {
+                    Log.d(TAG, "onCreate: loading")
+                }
+                is Resource.Success -> {
+                    Log.d(TAG, "onCreate: success: ${dataResource.data}")
+                }
+                is Resource.Error -> {
+                    Log.d(TAG, "onCreate: error: ${dataResource.message}")
+                }
+            }
         })
     }
 }

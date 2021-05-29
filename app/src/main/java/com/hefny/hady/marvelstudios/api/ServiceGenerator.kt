@@ -14,7 +14,7 @@ object ServiceGenerator {
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
 
-    private fun getInstance(): Retrofit {
+    fun getInstance(): Retrofit {
         val authenticationInterceptor = AuthenticationInterceptor()
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.HEADERS
@@ -25,5 +25,6 @@ object ServiceGenerator {
             .build()
         return builder.client(client).build()
     }
+
     val marvelApi: MarvelApi = getInstance().create(MarvelApi::class.java)
 }

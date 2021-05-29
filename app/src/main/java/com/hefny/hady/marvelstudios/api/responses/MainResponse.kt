@@ -9,7 +9,5 @@ data class MainResponse(
     @SerializedName("status")
     val status: String,
     @SerializedName("data")
-    var data: CharacterDataContainerResponse,
-    @SerializedName("message")
-    val message: String
+    var data: CharacterDataContainerResponse
 )
