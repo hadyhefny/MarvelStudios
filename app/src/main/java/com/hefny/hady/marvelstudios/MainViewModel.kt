@@ -11,12 +11,11 @@ import com.hefny.hady.marvelstudios.models.Character
 import com.hefny.hady.marvelstudios.ui.charactersList.datasource.CharactersDataSource
 
 class MainViewModel(private val marvelApi: MarvelApi) : ViewModel() {
-    private val TAG = "AppDebug"
-    fun getPagingCharacters(): LiveData<PagingData<Character>> {
+    fun getPagingCharacters(name: String? = null): LiveData<PagingData<Character>> {
         return Pager(
             PagingConfig(20)
         ) {
-            CharactersDataSource(marvelApi, "")
+            CharactersDataSource(marvelApi, name)
         }.liveData
     }
 }

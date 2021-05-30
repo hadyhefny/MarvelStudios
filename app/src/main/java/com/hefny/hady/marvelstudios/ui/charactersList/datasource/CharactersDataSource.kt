@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class CharactersDataSource(
     private val marvelApi: MarvelApi,
-    private val query: String
+    private val name: String?
 ) : RxPagingSource<Int, Character>() {
     override val keyReuseSupported: Boolean
         get() = true
@@ -20,7 +20,7 @@ class CharactersDataSource(
         if (nextOffset == null) {
             nextOffset = 0
         }
-        return marvelApi.getCharacters(nextOffset)
+        return marvelApi.getCharacters(name = name, offset = nextOffset)
             .subscribeOn(Schedulers.io())
             .map(this::toLoadResult)
             .onErrorReturn { t -> LoadResult.Error(t!!) }

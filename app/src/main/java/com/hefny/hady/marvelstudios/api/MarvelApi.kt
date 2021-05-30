@@ -8,6 +8,7 @@ import retrofit2.http.Query
 interface MarvelApi {
     @GET("characters")
     fun getCharacters(
+        @Query("nameStartsWith") name: String? = null,
         @Query("offset") offset: Int
     ): Single<MainResponse>
 }

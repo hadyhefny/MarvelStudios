@@ -5,11 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hefny.hady.marvelstudios.R
 import com.hefny.hady.marvelstudios.api.responses.ErrorResponse
 import com.hefny.hady.marvelstudios.ui.BaseFragment
+import com.hefny.hady.marvelstudios.ui.searchCharacters.SearchCharactersFragment
 import com.hefny.hady.marvelstudios.utils.ErrorUtils
 import kotlinx.android.synthetic.main.fragment_characters_list.*
 
@@ -55,6 +57,12 @@ class CharactersListFragment : BaseFragment(), CharactersPagingAdapter.Character
 //                    Log.d(TAG, "onViewCreated: errorMessage: ${errorResponse.message}")
 //                }
 //            }
+        }
+        search_icon_imageview.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .add(R.id.main_container,SearchCharactersFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 
