@@ -1,9 +1,8 @@
 package com.hefny.hady.marvelstudios.api.responses
 
 import com.google.gson.annotations.SerializedName
-import com.hefny.hady.marvelstudios.models.Character
 
-data class CharacterDataContainerResponse(
+data class DataContainerResponse<T>(
     @SerializedName("offset")
     val offset: Int,
     @SerializedName("limit")
@@ -13,10 +12,10 @@ data class CharacterDataContainerResponse(
     @SerializedName("count")
     val count: Int,
     @SerializedName("results")
-    val results: ArrayList<Character>
+    val results: ArrayList<T>
 ) {
     fun getNextOffset(): Int? {
-        if (offset > total){
+        if (offset > total) {
             return null
         }
         return offset + 20

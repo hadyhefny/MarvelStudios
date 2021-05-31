@@ -3,6 +3,7 @@ package com.hefny.hady.marvelstudios.ui.charactersList.datasource
 import androidx.paging.PagingState
 import androidx.paging.rxjava3.RxPagingSource
 import com.hefny.hady.marvelstudios.api.MarvelApi
+import com.hefny.hady.marvelstudios.api.responses.DataContainerResponse
 import com.hefny.hady.marvelstudios.api.responses.MainResponse
 import com.hefny.hady.marvelstudios.models.Character
 import io.reactivex.rxjava3.core.Single
@@ -27,7 +28,7 @@ class CharactersDataSource(
     }
 
     private fun toLoadResult(
-        response: MainResponse
+        response: MainResponse<DataContainerResponse<Character>>
     ): LoadResult<Int, Character> {
         return LoadResult.Page(
             response.data.results,

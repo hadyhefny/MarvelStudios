@@ -2,4 +2,11 @@
     <string name="app_name">MarvelStudios</string>
     <string name="search_for_a_character">Search for a character…</string>
     <string name="cancel">Cancel</string>
+    <string name="description">Description</string>
+    <string name="comics">Comics</string>
+    <string name="events">Events</string>
+    <string name="series">Series</string>
+    <string name="stories">Stories</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

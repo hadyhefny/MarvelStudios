@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hefny.hady.marvelstudios.R
 import com.hefny.hady.marvelstudios.api.responses.ErrorResponse
 import com.hefny.hady.marvelstudios.ui.BaseFragment
+import com.hefny.hady.marvelstudios.ui.characterDetails.CharacterDetailsFragment
+import com.hefny.hady.marvelstudios.utils.Constants
 import com.hefny.hady.marvelstudios.utils.ErrorUtils
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableOnSubscribe
@@ -163,7 +165,14 @@ class SearchCharactersFragment : BaseFragment(),
     }
 
     override fun onCharacterCLicked(position: Int) {
-        Log.d(TAG, "onCharacterCLicked: clicked $position")
+        val characterDetailsFragment = CharacterDetailsFragment()
+        val bundle = Bundle()
+        bundle.putParcelable(Constants.CHARACTER_KEY, pagingAdapter.peek(position))
+        characterDetailsFragment.arguments = bundle
+        parentFragmentManager.beginTransaction()
+            .add(R.id.main_container, characterDetailsFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroy() {
