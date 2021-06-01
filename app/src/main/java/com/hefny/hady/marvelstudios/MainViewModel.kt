@@ -26,19 +26,12 @@ class MainViewModel(private val marvelApi: MarvelApi) : ViewModel() {
     val marvelSummariesLiveData: LiveData<Resource<ArrayList<MarvelSummary>>>
         get() = _marvelSummariesMutableLiveData
 
-    private var currentResult: LiveData<PagingData<Character>>? = null
     fun getPagingCharacters(name: String? = null): LiveData<PagingData<Character>> {
-        val lastResult = currentResult
-        if (lastResult != null) {
-            return lastResult
-        }
-        val newResult: LiveData<PagingData<Character>> = Pager(
+        return Pager(
             PagingConfig(20)
         ) {
             CharactersDataSource(marvelApi, name)
-        }.liveData.cachedIn(viewModelScope)
-        currentResult = newResult
-        return newResult
+        }.liveData
     }
 
     fun getMarvelSummaries(url: String, type: String) {

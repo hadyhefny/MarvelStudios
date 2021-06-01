@@ -1,11 +1,14 @@
 package com.hefny.hady.marvelstudios.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.IBinder
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
+import androidx.core.view.ViewCompat
 import com.google.android.material.snackbar.Snackbar
 import com.hefny.hady.marvelstudios.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -13,6 +16,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), UICommunicationListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.apply {
+            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            statusBarColor = Color.TRANSPARENT
+        }
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction()
             .add(R.id.main_container, SplashFragment())
