@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.hefny.hady.marvelstudios.R
-import com.hefny.hady.marvelstudios.ui.charactersList.CharactersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), LoadingStateListener {
@@ -12,7 +11,7 @@ class MainActivity : AppCompatActivity(), LoadingStateListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction()
-            .add(R.id.main_container, CharactersListFragment())
+            .add(R.id.main_container, SplashFragment())
             .commit()
     }
 
