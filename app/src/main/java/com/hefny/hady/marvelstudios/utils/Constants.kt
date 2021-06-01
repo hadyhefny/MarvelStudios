@@ -9,5 +9,6 @@ class Constants {
         const val SERIES = "com.hefny.hady.marvelstudios.SERIES"
         const val STORIES = "com.hefny.hady.marvelstudios.STORIES"
         const val SINGLE_IMAGE = "com.hefny.hady.marvelstudios.SINGLE_IMAGE"
+        const val TRANSITION_KEY = "com.hefny.hady.marvelstudios.utils.TransitionNameOfImage"
     }
 }

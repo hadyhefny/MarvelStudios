@@ -1,6 +1,7 @@
 package com.hefny.hady.marvelstudios.ui.characterDetails
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.hefny.hady.marvelstudios.R
 import com.hefny.hady.marvelstudios.ui.BaseFragment
 import com.hefny.hady.marvelstudios.utils.Constants
 import kotlinx.android.synthetic.main.fragment_full_image.*
+import kotlinx.android.synthetic.main.fragment_full_image.view.*
 
 class FullImageFragment : BaseFragment() {
     private val TAG = "AppDebug"
@@ -20,7 +22,11 @@ class FullImageFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_full_image, container, false)
+        val view = inflater.inflate(R.layout.fragment_full_image, container, false)
+        view.full_image.transitionName = arguments?.getString(Constants.TRANSITION_KEY)
+        sharedElementEnterTransition =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

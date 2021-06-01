@@ -66,12 +66,14 @@ class CharactersListFragment : BaseFragment(), CharactersPagingAdapter.Character
         }
     }
 
-    override fun onCharacterCLicked(position: Int) {
+    override fun onCharacterCLicked(position: Int, view: View) {
         val characterDetailsFragment = CharacterDetailsFragment()
         val bundle = Bundle()
         bundle.putParcelable(Constants.CHARACTER_KEY, pagingAdapter.peek(position))
+        bundle.putString(Constants.TRANSITION_KEY, view.transitionName)
         characterDetailsFragment.arguments = bundle
         parentFragmentManager.beginTransaction()
+            .addSharedElement(view, view.transitionName)
             .add(R.id.main_container, characterDetailsFragment)
             .addToBackStack(null)
             .commit()

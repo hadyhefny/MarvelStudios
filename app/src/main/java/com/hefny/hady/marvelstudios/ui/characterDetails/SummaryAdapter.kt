@@ -50,19 +50,19 @@ class SummaryAdapter(private val summaryClickListener: SummaryClickListener) :
                 .error(R.drawable.image_placeholder)
                 .apply(requestOptions)
                 .into(itemView.summary_image_imageview)
-
+            itemView.summary_image_imageview.transitionName = "${summary.name}$bindingAdapterPosition"
             if (!summary.name.isNullOrBlank()) {
                 itemView.summary_name_textview.setText(summary.name)
             } else if (!summary.title.isNullOrBlank()) {
                 itemView.summary_name_textview.setText(summary.title)
             }
             itemView.setOnClickListener {
-                summaryClickListener.onSummaryCLicked(summary.resourceURI)
+                summaryClickListener.onSummaryCLicked(summary.resourceURI, itemView.summary_image_imageview)
             }
         }
     }
 
     interface SummaryClickListener {
-        fun onSummaryCLicked(resourceUri: String)
+        fun onSummaryCLicked(resourceUri: String, view: View)
     }
 }

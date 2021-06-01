@@ -52,15 +52,16 @@ class CharactersPagingAdapter(private val characterClickListener: CharacterClick
                 .error(R.drawable.image_placeholder)
                 .apply(requestOptions)
                 .into(itemView.character_image_imageview)
-
+            val imageTransitionName = "charactersListTransitionAnimation"
+            itemView.character_image_imageview.transitionName = "$imageTransitionName$bindingAdapterPosition"
             itemView.character_name_textview.setText(character?.name)
             itemView.setOnClickListener {
-                characterClickListener.onCharacterCLicked(bindingAdapterPosition)
+                characterClickListener.onCharacterCLicked(bindingAdapterPosition, itemView.character_image_imageview)
             }
         }
     }
 
     interface CharacterClickListener {
-        fun onCharacterCLicked(position: Int)
+        fun onCharacterCLicked(position: Int, view: View)
     }
 }

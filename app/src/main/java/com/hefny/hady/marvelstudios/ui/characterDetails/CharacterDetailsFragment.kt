@@ -1,6 +1,7 @@
 package com.hefny.hady.marvelstudios.ui.characterDetails
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.hefny.hady.marvelstudios.utils.Constants.Companion.EVENTS
 import com.hefny.hady.marvelstudios.utils.Constants.Companion.SERIES
 import com.hefny.hady.marvelstudios.utils.Constants.Companion.STORIES
 import kotlinx.android.synthetic.main.fragment_character_details.*
+import kotlinx.android.synthetic.main.fragment_character_details.view.*
 import kotlinx.android.synthetic.main.search_character_list_item.view.*
 
 class CharacterDetailsFragment : BaseFragment(), SummaryAdapter.SummaryClickListener {
@@ -34,7 +36,10 @@ class CharacterDetailsFragment : BaseFragment(), SummaryAdapter.SummaryClickList
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_character_details, container, false)
+        val view = inflater.inflate(R.layout.fragment_character_details, container, false)
+        view.character_details_image_imageview.transitionName = arguments?.getString(Constants.TRANSITION_KEY)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -179,13 +184,15 @@ class CharacterDetailsFragment : BaseFragment(), SummaryAdapter.SummaryClickList
         }
     }
 
-    override fun onSummaryCLicked(resourceUri: String) {
+    override fun onSummaryCLicked(resourceUri: String, view: View) {
         Log.d(TAG, "onSummaryCLicked: $resourceUri")
         val fullImageFragment = FullImageFragment()
         val bundle = Bundle()
         bundle.putString(Constants.FULL_IMAGE_KEY, resourceUri)
+        bundle.putString(Constants.TRANSITION_KEY, view.transitionName)
         fullImageFragment.arguments = bundle
         parentFragmentManager.beginTransaction()
+            .addSharedElement(view, view.transitionName)
             .add(R.id.main_container, fullImageFragment)
             .addToBackStack(null)
             .commit()
