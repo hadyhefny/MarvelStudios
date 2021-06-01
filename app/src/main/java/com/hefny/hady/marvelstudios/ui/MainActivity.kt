@@ -2,13 +2,10 @@ package com.hefny.hady.marvelstudios.ui
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.IBinder
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.getSystemService
-import androidx.core.view.ViewCompat
 import com.google.android.material.snackbar.Snackbar
 import com.hefny.hady.marvelstudios.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,9 +20,11 @@ class MainActivity : AppCompatActivity(), UICommunicationListener {
             statusBarColor = Color.TRANSPARENT
         }
         setContentView(R.layout.activity_main)
-        supportFragmentManager.beginTransaction()
-            .add(R.id.main_container, SplashFragment())
-            .commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.main_container, SplashFragment())
+                .commit()
+        }
 
         supportFragmentManager.addOnBackStackChangedListener {
             hideKeyboard()
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity(), UICommunicationListener {
 
     override fun hideKeyboard() {
         main_coordinatorlayout.requestFocus()
-        val imm : InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(main_coordinatorlayout.rootView.windowToken,0)
+        val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(main_coordinatorlayout.rootView.windowToken, 0)
     }
 }
