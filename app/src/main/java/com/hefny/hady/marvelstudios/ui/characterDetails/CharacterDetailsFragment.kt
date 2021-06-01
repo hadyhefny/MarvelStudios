@@ -37,8 +37,10 @@ class CharacterDetailsFragment : BaseFragment(), SummaryAdapter.SummaryClickList
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_character_details, container, false)
-        view.character_details_image_imageview.transitionName = arguments?.getString(Constants.TRANSITION_KEY)
-        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+        view.character_details_image_imageview.transitionName =
+            arguments?.getString(Constants.TRANSITION_KEY)
+        sharedElementEnterTransition =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
         return view
     }
 

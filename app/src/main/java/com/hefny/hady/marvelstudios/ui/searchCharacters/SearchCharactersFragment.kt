@@ -13,6 +13,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionInflater
 import com.hefny.hady.marvelstudios.R
 import com.hefny.hady.marvelstudios.api.responses.ErrorResponse
 import com.hefny.hady.marvelstudios.ui.BaseFragment
@@ -36,6 +37,13 @@ class SearchCharactersFragment : BaseFragment(),
     private lateinit var pagingAdapter: SearchCharactersPagingAdapter
     private val disposable = CompositeDisposable()
     private lateinit var handler: Handler
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(android.R.transition.slide_left)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

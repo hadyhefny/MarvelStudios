@@ -52,6 +52,7 @@ class CharactersListFragment : BaseFragment(), CharactersPagingAdapter.Character
 
         search_icon_imageview.setOnClickListener {
             parentFragmentManager.beginTransaction()
+                .addSharedElement(search_icon_imageview, search_icon_imageview.transitionName)
                 .add(R.id.main_container, SearchCharactersFragment())
                 .addToBackStack(null)
                 .commit()
