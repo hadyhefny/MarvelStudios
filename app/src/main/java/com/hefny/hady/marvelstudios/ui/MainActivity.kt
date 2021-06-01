@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), UICommunicationListener {
     }
 
     override fun hideKeyboard() {
+        main_coordinatorlayout.requestFocus()
         val imm : InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(main_coordinatorlayout.rootView.windowToken,0)
     }
