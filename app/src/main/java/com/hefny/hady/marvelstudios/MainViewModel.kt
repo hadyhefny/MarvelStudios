@@ -3,10 +3,8 @@ package com.hefny.hady.marvelstudios
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.liveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.*
 import com.hefny.hady.marvelstudios.api.MarvelApi
 import com.hefny.hady.marvelstudios.api.responses.DataContainerResponse
 import com.hefny.hady.marvelstudios.api.responses.MainResponse
@@ -28,12 +26,19 @@ class MainViewModel(private val marvelApi: MarvelApi) : ViewModel() {
     val marvelSummariesLiveData: LiveData<Resource<ArrayList<MarvelSummary>>>
         get() = _marvelSummariesMutableLiveData
 
+    private var currentResult: LiveData<PagingData<Character>>? = null
     fun getPagingCharacters(name: String? = null): LiveData<PagingData<Character>> {
-        return Pager(
+        val lastResult = currentResult
+        if (lastResult != null) {
+            return lastResult
+        }
+        val newResult: LiveData<PagingData<Character>> = Pager(
             PagingConfig(20)
         ) {
             CharactersDataSource(marvelApi, name)
-        }.liveData
+        }.liveData.cachedIn(viewModelScope)
+        currentResult = newResult
+        return newResult
     }
 
     fun getMarvelSummaries(url: String, type: String) {

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hefny.hady.marvelstudios.R
 import com.hefny.hady.marvelstudios.api.responses.ErrorResponse
 import com.hefny.hady.marvelstudios.ui.BaseFragment
+import com.hefny.hady.marvelstudios.ui.CharactersLoadStateAdapter
 import com.hefny.hady.marvelstudios.ui.characterDetails.CharacterDetailsFragment
 import com.hefny.hady.marvelstudios.ui.searchCharacters.SearchCharactersFragment
 import com.hefny.hady.marvelstudios.utils.Constants
@@ -45,21 +46,10 @@ class CharactersListFragment : BaseFragment(), CharactersPagingAdapter.Character
                     val errorResponse: ErrorResponse =
                         ErrorUtils.parseError((loadStates.refresh as LoadState.Error).error)
                     uiCommunicationListener.showError(errorResponse.message)
-                    Log.d(TAG, "onViewCreated: errorMessage: ${errorResponse.message}")
                 }
             }
-//            // handle different loading states (error, loading) when try to paginate
-//            when (loadStates.append) {
-//                is LoadState.Loading -> loadingStateListener.showLoadingState(true)
-//                is LoadState.NotLoading -> loadingStateListener.showLoadingState(false)
-//                is LoadState.Error -> {
-//                    loadingStateListener.showLoadingState(false)
-//                    val errorResponse: ErrorResponse =
-//                        ErrorUtils.parseError((loadStates.append as LoadState.Error).error)
-//                    Log.d(TAG, "onViewCreated: errorMessage: ${errorResponse.message}")
-//                }
-//            }
         }
+
         search_icon_imageview.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .add(R.id.main_container, SearchCharactersFragment())
@@ -72,7 +62,7 @@ class CharactersListFragment : BaseFragment(), CharactersPagingAdapter.Character
         characters_recyclerview.run {
             layoutManager = LinearLayoutManager(requireContext())
             pagingAdapter = CharactersPagingAdapter(this@CharactersListFragment)
-            adapter = pagingAdapter
+            adapter = pagingAdapter.withLoadStateFooter(CharactersLoadStateAdapter())
         }
     }
 
