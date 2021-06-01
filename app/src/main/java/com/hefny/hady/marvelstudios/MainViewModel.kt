@@ -63,6 +63,6 @@ class MainViewModel(private val marvelApi: MarvelApi) : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        disposable.dispose()
+        disposable.clear()
     }
 }

@@ -146,10 +146,12 @@ class SearchCharactersFragment : BaseFragment(),
     private fun handleSearchResult(name: String) {
         if (name.isNotBlank()) {
             pagingAdapter.setTextToHighlight(name)
-            viewModel.getPagingCharacters(name).observe(viewLifecycleOwner, {
-                pagingAdapter.submitData(this@SearchCharactersFragment.lifecycle, it)
-                pagingAdapter.notifyDataSetChanged()
-            })
+            view?.let {
+                viewModel.getPagingCharacters(name).observe(viewLifecycleOwner, { pagingData ->
+                    pagingAdapter.submitData(this@SearchCharactersFragment.lifecycle, pagingData)
+                    pagingAdapter.notifyDataSetChanged()
+                })
+            }
         } else {
             pagingAdapter.submitData(
                 requireActivity().lifecycle,
@@ -186,6 +188,6 @@ class SearchCharactersFragment : BaseFragment(),
 
     override fun onDestroy() {
         super.onDestroy()
-        disposable.dispose()
+        disposable.clear()
     }
 }

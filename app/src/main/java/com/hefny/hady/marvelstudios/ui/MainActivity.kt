@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity(), UICommunicationListener {
 
         supportFragmentManager.addOnBackStackChangedListener {
             hideKeyboard()
+            showProgressBar(false)
         }
     }
 

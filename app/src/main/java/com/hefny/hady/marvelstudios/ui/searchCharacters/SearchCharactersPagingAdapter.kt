@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.hefny.hady.marvelstudios.R
 import com.hefny.hady.marvelstudios.models.Character
 import kotlinx.android.synthetic.main.search_character_list_item.view.*
+import java.util.*
 
 
 class SearchCharactersPagingAdapter(private val characterClickListener: CharacterClickListener) :
@@ -56,14 +57,26 @@ class SearchCharactersPagingAdapter(private val characterClickListener: Characte
     ) : RecyclerView.ViewHolder(itemView) {
         fun bind(character: Character?, textToHighlight: String) {
             var requestOptions = RequestOptions()
-            requestOptions = requestOptions.transform(
-                CenterCrop(), GranularRoundedCorners(
-                    60f,
-                    0f,
-                    0f,
-                    60f
+            val language = Locale.getDefault().language
+            if(language == "ar"){
+                requestOptions = requestOptions.transform(
+                    CenterCrop(), GranularRoundedCorners(
+                        0f,
+                        60f,
+                        60f,
+                        0f
+                    )
                 )
-            )
+            }else{
+                requestOptions = requestOptions.transform(
+                    CenterCrop(), GranularRoundedCorners(
+                        60f,
+                        0f,
+                        0f,
+                        60f
+                    )
+                )
+            }
             Glide.with(itemView.context)
                 .load(character?.thumbnail?.getImageUrl())
                 .placeholder(R.drawable.image_placeholder)
