@@ -38,12 +38,13 @@ class CharactersListFragment : BaseFragment(), CharactersPagingAdapter.Character
         pagingAdapter.addLoadStateListener { loadStates ->
             // handle different loading states (error, loading) when first loading the list
             when (loadStates.refresh) {
-                is LoadState.Loading -> loadingStateListener.showLoadingState(true)
-                is LoadState.NotLoading -> loadingStateListener.showLoadingState(false)
+                is LoadState.Loading -> uiCommunicationListener.showProgressBar(true)
+                is LoadState.NotLoading -> uiCommunicationListener.showProgressBar(false)
                 is LoadState.Error -> {
-                    loadingStateListener.showLoadingState(false)
+                    uiCommunicationListener.showProgressBar(false)
                     val errorResponse: ErrorResponse =
                         ErrorUtils.parseError((loadStates.refresh as LoadState.Error).error)
+                    uiCommunicationListener.showError(errorResponse.message)
                     Log.d(TAG, "onViewCreated: errorMessage: ${errorResponse.message}")
                 }
             }

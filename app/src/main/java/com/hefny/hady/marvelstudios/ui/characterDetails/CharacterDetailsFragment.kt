@@ -49,6 +49,7 @@ class CharacterDetailsFragment : BaseFragment(), SummaryAdapter.SummaryClickList
             parentFragmentManager.popBackStack()
         }
         viewModel.marvelSummariesLiveData.observe(viewLifecycleOwner, { imageResource ->
+            // handle success
             imageResource.type?.let { dataType ->
                 when (dataType) {
                     COMICS -> {
@@ -71,7 +72,13 @@ class CharacterDetailsFragment : BaseFragment(), SummaryAdapter.SummaryClickList
                             storiesAdapter.setSummaryList(storiesList)
                         }
                     }
+                    else -> {
+                    }
                 }
+            }
+            // handle error
+            imageResource.error?.getContentIfNotHandled()?.let {
+                uiCommunicationListener.showError(it)
             }
         })
     }

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hefny.hady.marvelstudios.R
 import com.hefny.hady.marvelstudios.api.responses.ErrorResponse
 import com.hefny.hady.marvelstudios.ui.BaseFragment
@@ -51,13 +52,14 @@ class SearchCharactersFragment : BaseFragment(),
         pagingAdapter.addLoadStateListener { loadStates ->
             // handle different loading states (error, loading) when first loading the list
             when (loadStates.refresh) {
-                is LoadState.Loading -> loadingStateListener.showLoadingState(true)
-                is LoadState.NotLoading -> loadingStateListener.showLoadingState(false)
+                is LoadState.Loading -> uiCommunicationListener.showProgressBar(true)
+                is LoadState.NotLoading -> uiCommunicationListener.showProgressBar(false)
                 is LoadState.Error -> {
-                    loadingStateListener.showLoadingState(false)
+                    uiCommunicationListener.showProgressBar(false)
                     val errorResponse: ErrorResponse =
                         ErrorUtils.parseError((loadStates.refresh as LoadState.Error).error)
                     Log.d(TAG, "onViewCreated: errorMessage: ${errorResponse.message}")
+                    uiCommunicationListener.showError(errorResponse.message)
                 }
             }
 //            // handle different loading states (error, loading) when try to paginate
@@ -162,6 +164,13 @@ class SearchCharactersFragment : BaseFragment(),
             pagingAdapter = SearchCharactersPagingAdapter(this@SearchCharactersFragment)
             adapter = pagingAdapter
         }
+        search_characters_recyclerview.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                uiCommunicationListener.hideKeyboard()
+            }
+        })
     }
 
     override fun onCharacterCLicked(position: Int) {

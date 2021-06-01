@@ -30,7 +30,7 @@ class FullImageFragment : BaseFragment() {
         }
         viewModel.marvelSummariesLiveData.observe(viewLifecycleOwner, { imageResource ->
             // handle loading
-            loadingStateListener.showLoadingState(imageResource.loading)
+            uiCommunicationListener.showProgressBar(imageResource.loading)
             // handle success
             if (imageResource.type == Constants.SINGLE_IMAGE) {
                 imageResource.data?.getContentIfNotHandled()?.let { marvelSummaryList ->
@@ -49,8 +49,10 @@ class FullImageFragment : BaseFragment() {
                 }
             }
             // handle error
-            imageResource.error?.getContentIfNotHandled()?.let {
+            imageResource.error?.peekContent()?.let {
                 Log.d(TAG, "onViewCreated: error message: $it")
+                parentFragmentManager.popBackStack()
+                uiCommunicationListener.showError(it)
             }
         })
     }
