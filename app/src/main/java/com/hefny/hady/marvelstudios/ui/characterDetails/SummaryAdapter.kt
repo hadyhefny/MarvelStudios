@@ -9,7 +9,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.hefny.hady.marvelstudios.R
-import com.hefny.hady.marvelstudios.models.MarvelIssue
 import com.hefny.hady.marvelstudios.models.MarvelSummary
 import kotlinx.android.synthetic.main.summary_list_item.view.*
 
@@ -38,20 +37,6 @@ class SummaryAdapter(private val summaryClickListener: SummaryClickListener) :
         }
     }
 
-    fun setMarvelIssues(issues: ArrayList<MarvelIssue>) {
-//        issues.forEachIndexed { index, marvelSummary ->
-//            summaryList[index].thumbnail = marvelSummary.thumbnail
-//        }
-        issues.forEach { marvelSummary ->
-            summaryList.forEach {
-                if (it.name == marvelSummary.title) {
-                    it.thumbnail = marvelSummary.thumbnail
-                }
-            }
-        }
-        notifyDataSetChanged()
-    }
-
     class SummaryViewHolder(
         itemView: View,
         private val summaryClickListener: SummaryClickListener
@@ -66,7 +51,11 @@ class SummaryAdapter(private val summaryClickListener: SummaryClickListener) :
                 .apply(requestOptions)
                 .into(itemView.summary_image_imageview)
 
-            itemView.summary_name_textview.setText(summary.name)
+            if (!summary.name.isNullOrBlank()) {
+                itemView.summary_name_textview.setText(summary.name)
+            } else if (!summary.title.isNullOrBlank()) {
+                itemView.summary_name_textview.setText(summary.title)
+            }
             itemView.setOnClickListener {
                 summaryClickListener.onSummaryCLicked(summary.resourceURI)
             }

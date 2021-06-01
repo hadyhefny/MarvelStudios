@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.hefny.hady.marvelstudios.R
@@ -27,16 +26,19 @@ class FullImageFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.getString(Constants.FULL_IMAGE_KEY)?.let {
-            viewModel.getImage(it).observe(viewLifecycleOwner, { imageResource ->
-                // handle loading
-                loadingStateListener.showLoadingState(imageResource.loading)
-                // handle success
-                imageResource.data?.getContentIfNotHandled()?.let { marvelIssue ->
-                    if (marvelIssue.thumbnail != null) {
+            viewModel.getMarvelSummaries(it, Constants.SINGLE_IMAGE)
+        }
+        viewModel.marvelSummariesLiveData.observe(viewLifecycleOwner, { imageResource ->
+            // handle loading
+            loadingStateListener.showLoadingState(imageResource.loading)
+            // handle success
+            if (imageResource.type == Constants.SINGLE_IMAGE) {
+                imageResource.data?.getContentIfNotHandled()?.let { marvelSummaryList ->
+                    if (marvelSummaryList[0].thumbnail != null) {
                         var requestOptions = RequestOptions()
                         requestOptions = requestOptions.transform(RoundedCorners(60))
                         Glide.with(requireContext())
-                            .load(marvelIssue.thumbnail.getImageUrl())
+                            .load(marvelSummaryList[0].thumbnail?.getImageUrl())
                             .placeholder(R.drawable.image_placeholder)
                             .error(R.drawable.image_placeholder)
                             .apply(requestOptions)
@@ -45,11 +47,11 @@ class FullImageFragment : BaseFragment() {
                         parentFragmentManager.popBackStack()
                     }
                 }
-                // handle error
-                imageResource.error?.getContentIfNotHandled()?.let {
-                    Log.d(TAG, "onViewCreated: error message: $it")
-                }
-            })
-        }
+            }
+            // handle error
+            imageResource.error?.getContentIfNotHandled()?.let {
+                Log.d(TAG, "onViewCreated: error message: $it")
+            }
+        })
     }
 }

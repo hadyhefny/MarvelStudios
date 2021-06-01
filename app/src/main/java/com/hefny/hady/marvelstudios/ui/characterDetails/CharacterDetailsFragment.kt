@@ -15,6 +15,10 @@ import com.hefny.hady.marvelstudios.R
 import com.hefny.hady.marvelstudios.models.Character
 import com.hefny.hady.marvelstudios.ui.BaseFragment
 import com.hefny.hady.marvelstudios.utils.Constants
+import com.hefny.hady.marvelstudios.utils.Constants.Companion.COMICS
+import com.hefny.hady.marvelstudios.utils.Constants.Companion.EVENTS
+import com.hefny.hady.marvelstudios.utils.Constants.Companion.SERIES
+import com.hefny.hady.marvelstudios.utils.Constants.Companion.STORIES
 import kotlinx.android.synthetic.main.fragment_character_details.*
 import kotlinx.android.synthetic.main.search_character_list_item.view.*
 
@@ -24,6 +28,7 @@ class CharacterDetailsFragment : BaseFragment(), SummaryAdapter.SummaryClickList
     private lateinit var eventsAdapter: SummaryAdapter
     private lateinit var seriesAdapter: SummaryAdapter
     private lateinit var storiesAdapter: SummaryAdapter
+    private var character: Character? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,15 +41,42 @@ class CharacterDetailsFragment : BaseFragment(), SummaryAdapter.SummaryClickList
         super.onViewCreated(view, savedInstanceState)
         initRecyclerViews()
         arguments?.let { bundle ->
-            val character: Character? = bundle.getParcelable(Constants.CHARACTER_KEY)
-            setupViews(character)
+            val myCharacter: Character? = bundle.getParcelable(Constants.CHARACTER_KEY)
+            character = myCharacter
+            setupViews()
         }
         character_details_back_constraintlayout.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+        viewModel.marvelSummariesLiveData.observe(viewLifecycleOwner, { imageResource ->
+            imageResource.type?.let { dataType ->
+                when (dataType) {
+                    COMICS -> {
+                        imageResource.data?.getContentIfNotHandled()?.let { comicsList ->
+                            comicsAdapter.setSummaryList(comicsList)
+                        }
+                    }
+                    EVENTS -> {
+                        imageResource.data?.getContentIfNotHandled()?.let { eventsList ->
+                            eventsAdapter.setSummaryList(eventsList)
+                        }
+                    }
+                    SERIES -> {
+                        imageResource.data?.getContentIfNotHandled()?.let { seriesList ->
+                            seriesAdapter.setSummaryList(seriesList)
+                        }
+                    }
+                    STORIES -> {
+                        imageResource.data?.getContentIfNotHandled()?.let { storiesList ->
+                            storiesAdapter.setSummaryList(storiesList)
+                        }
+                    }
+                }
+            }
+        })
     }
 
-    private fun setupViews(character: Character?) {
+    private fun setupViews() {
         character?.let {
             var requestOptions = RequestOptions()
             requestOptions = requestOptions.transform(
@@ -70,90 +102,35 @@ class CharacterDetailsFragment : BaseFragment(), SummaryAdapter.SummaryClickList
                 character_details_description_textview.visibility = View.VISIBLE
             }
             character_details_description_textview.setText(it.description)
-            comicsAdapter.setSummaryList(it.comics.items)
             if (it.events.items.size == 0) {
                 character_details_events_label_textview.visibility = View.GONE
             } else {
                 character_details_events_label_textview.visibility = View.VISIBLE
             }
+            comicsAdapter.setSummaryList(it.comics.items)
             eventsAdapter.setSummaryList(it.events.items)
             seriesAdapter.setSummaryList(it.series.items)
             storiesAdapter.setSummaryList(it.stories.items)
-            getImages(it)
+            getAllSummaries()
         }
     }
 
-    private fun getImages(character: Character) {
-        getComicsImages(character)
-        getEventsImages(character)
-        getSeriesImages(character)
-        getStoriesImages(character)
+    private fun getAllSummaries() {
+        getMarvelSummaries(COMICS)
+        getMarvelSummaries(EVENTS)
+        getMarvelSummaries(SERIES)
+        getMarvelSummaries(STORIES)
     }
 
-    private fun getComicsImages(character: Character) {
-        viewModel.getComicImage(character.comics.collectionURI)
-            .observe(viewLifecycleOwner, { imageResource ->
-                // handle loading
-//            imageResource.loading
-                // handle success
-                imageResource.data?.peekContent()?.let { comicsList ->
-                    Log.d(TAG, "getComicsImages: called")
-                    comicsAdapter.setMarvelIssues(comicsList)
-                }
-                // handle error
-                imageResource.error?.getContentIfNotHandled()?.let { errorMessage ->
-                    Log.d(TAG, "onViewCreated: error message: $errorMessage")
-                }
-            })
-    }
-
-    private fun getEventsImages(character: Character) {
-        viewModel.getEventImage(character.events.collectionURI)
-            .observe(viewLifecycleOwner, { imageResource ->
-                // handle loading
-//            imageResource.loading
-                // handle success
-                imageResource.data?.peekContent()?.let { eventsList ->
-                    eventsAdapter.setMarvelIssues(eventsList)
-                }
-                // handle error
-                imageResource.error?.getContentIfNotHandled()?.let { errorMessage ->
-                    Log.d(TAG, "onViewCreated: error message: $errorMessage")
-                }
-            })
-    }
-
-    private fun getSeriesImages(character: Character) {
-        viewModel.getSeriesImage(character.series.collectionURI)
-            .observe(viewLifecycleOwner, { imageResource ->
-                // handle loading
-//            imageResource.loading
-                // handle success
-                imageResource.data?.peekContent()?.let {
-                    seriesAdapter.setMarvelIssues(it)
-                }
-                // handle error
-                imageResource.error?.getContentIfNotHandled()?.let { errorMessage ->
-                    Log.d(TAG, "onViewCreated: error message: $errorMessage")
-                }
-            })
-
-    }
-
-    private fun getStoriesImages(character: Character) {
-        viewModel.getStoryImage(character.stories.collectionURI)
-            .observe(viewLifecycleOwner, { imageResource ->
-                // handle loading
-//            imageResource.loading
-                // handle success
-                imageResource.data?.peekContent()?.let {
-                    storiesAdapter.setMarvelIssues(it)
-                }
-                // handle error
-                imageResource.error?.getContentIfNotHandled()?.let { errorMessage ->
-                    Log.d(TAG, "onViewCreated: error message: $errorMessage")
-                }
-            })
+    private fun getMarvelSummaries(type: String) {
+        character?.let {
+            when (type) {
+                COMICS -> viewModel.getMarvelSummaries(it.comics.collectionURI, type)
+                EVENTS -> viewModel.getMarvelSummaries(it.events.collectionURI, type)
+                SERIES -> viewModel.getMarvelSummaries(it.series.collectionURI, type)
+                STORIES -> viewModel.getMarvelSummaries(it.stories.collectionURI, type)
+            }
+        }
     }
 
     private fun initRecyclerViews() {

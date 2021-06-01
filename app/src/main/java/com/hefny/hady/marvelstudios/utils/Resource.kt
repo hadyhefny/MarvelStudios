@@ -7,7 +7,8 @@ data class Resource<T>(
     var loading: Boolean = false,
     var error: Event<String>? = null,
     var data: Event<T>? = null,
-    var message: String? = null
+    var message: String? = null,
+    var type: String? = null
 ) {
     companion object {
         fun <T> loading(isLoading: Boolean): Resource<T> {
@@ -18,10 +19,9 @@ data class Resource<T>(
             return Resource(error = Event.responseEvent(message))
         }
 
-        fun <T> data(data: T? = null, message: String? = null): Resource<T> {
-            return Resource(data = Event.dataEvent(data), message = message)
+        fun <T> data(data: T? = null, message: String? = null, type: String? = null): Resource<T> {
+            return Resource(data = Event.dataEvent(data), message = message, type = type)
         }
-
     }
 }
 

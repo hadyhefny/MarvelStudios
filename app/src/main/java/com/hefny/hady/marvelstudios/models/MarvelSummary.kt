@@ -10,7 +10,9 @@ data class MarvelSummary(
     @SerializedName("resourceURI")
     val resourceURI: String,
     @SerializedName("name")
-    val name: String,
+    val name: String?,
+    @SerializedName("title")
+    val title: String?,
     @SerializedName("type")
     val type: String,
     var thumbnail: Thumbnail?
