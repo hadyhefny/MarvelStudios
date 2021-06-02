@@ -6,11 +6,10 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.hefny.hady.marvelstudios.R
 import com.hefny.hady.marvelstudios.ui.charactersList.CharactersListFragment
 
-class SplashFragment : Fragment() {
+class SplashFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

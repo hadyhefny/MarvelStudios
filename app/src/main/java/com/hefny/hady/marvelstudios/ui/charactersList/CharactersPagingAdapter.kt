@@ -1,6 +1,5 @@
 package com.hefny.hady.marvelstudios.ui.charactersList
 
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,10 +52,14 @@ class CharactersPagingAdapter(private val characterClickListener: CharacterClick
                 .apply(requestOptions)
                 .into(itemView.character_image_imageview)
             val imageTransitionName = "charactersListTransitionAnimation"
-            itemView.character_image_imageview.transitionName = "$imageTransitionName$bindingAdapterPosition"
+            itemView.character_image_imageview.transitionName =
+                "$imageTransitionName$bindingAdapterPosition"
             itemView.character_name_textview.setText(character?.name)
             itemView.setOnClickListener {
-                characterClickListener.onCharacterCLicked(bindingAdapterPosition, itemView.character_image_imageview)
+                characterClickListener.onCharacterCLicked(
+                    bindingAdapterPosition,
+                    itemView.character_image_imageview
+                )
             }
         }
     }

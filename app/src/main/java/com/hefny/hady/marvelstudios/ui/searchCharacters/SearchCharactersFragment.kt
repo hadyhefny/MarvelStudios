@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit
 
 class SearchCharactersFragment : BaseFragment(),
     SearchCharactersPagingAdapter.CharacterClickListener {
-    private val TAG = "AppDebug"
     private lateinit var pagingAdapter: SearchCharactersPagingAdapter
     private val disposable = CompositeDisposable()
     private lateinit var handler: Handler
@@ -56,7 +55,6 @@ class SearchCharactersFragment : BaseFragment(),
         super.onViewCreated(view, savedInstanceState)
         initRecyclerview()
         handler = Handler(Looper.getMainLooper())
-        Log.d(TAG, "onViewCreated: search viewmodel hash: ${viewModel.hashCode()}")
         searchCharactersByName()
         pagingAdapter.addLoadStateListener { loadStates ->
             // handle different loading states (error, loading) when first loading the list
@@ -96,7 +94,6 @@ class SearchCharactersFragment : BaseFragment(),
                         before: Int,
                         count: Int
                     ) {
-                        Log.d(TAG, "onTextChanged: t: ${Thread.currentThread()}")
                         // emit text to the observer
                         if (!emitter.isDisposed) {
                             emitter.onNext(s.toString())
