@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@color/light_gray" />
+            <size
+                android:width="30dp"
+                android:height="1dp" />
+            <corners
+                android:bottomRightRadius="16dp"
+                android:topRightRadius="16dp" />
+            <padding
+                android:bottom="4dp"
+                android:left="25dp"
+                android:right="20dp"
+                android:top="4dp" />
+        </shape>
+
+    </item>
+
+    <item android:drawable="@drawable/ic_baseline_arrow_back_ios_24" />
+
+</layer-list>
