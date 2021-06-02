@@ -1,4 +1,4 @@
-package com.hefny.hady.marvelstudios
+package com.hefny.hady.marvelstudios.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,13 +13,18 @@ import com.hefny.hady.marvelstudios.models.MarvelSummary
 import com.hefny.hady.marvelstudios.ui.charactersList.datasource.CharactersDataSource
 import com.hefny.hady.marvelstudios.utils.ErrorUtils
 import com.hefny.hady.marvelstudios.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Inject
 
-class MainViewModel(private val marvelApi: MarvelApi) : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val marvelApi: MarvelApi
+) : ViewModel() {
     private val disposable = CompositeDisposable()
     private val _marvelSummariesMutableLiveData =
         MutableLiveData<Resource<ArrayList<MarvelSummary>>>()

@@ -18,7 +18,6 @@ import com.hefny.hady.marvelstudios.utils.ErrorUtils
 import kotlinx.android.synthetic.main.fragment_characters_list.*
 
 class CharactersListFragment : BaseFragment(), CharactersPagingAdapter.CharacterClickListener {
-    private val TAG = "AppDebug"
     private lateinit var pagingAdapter: CharactersPagingAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +29,6 @@ class CharactersListFragment : BaseFragment(), CharactersPagingAdapter.Character
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: viewmodel hash: ${viewModel.hashCode()}")
         initRecyclerview()
         // handle success
         viewModel.getPagingCharacters().observe(viewLifecycleOwner, {

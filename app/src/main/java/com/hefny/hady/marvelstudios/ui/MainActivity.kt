@@ -6,13 +6,17 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import com.hefny.hady.marvelstudios.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), UICommunicationListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // make status bar transparent
         window.apply {
             clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -20,6 +24,10 @@ class MainActivity : AppCompatActivity(), UICommunicationListener {
             statusBarColor = Color.TRANSPARENT
         }
         setContentView(R.layout.activity_main)
+        /**
+         * start splash fragment in first app run only
+         * to prevent it from starting again in device configuration change
+         */
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .add(R.id.main_container, SplashFragment())
@@ -33,7 +41,7 @@ class MainActivity : AppCompatActivity(), UICommunicationListener {
     }
 
     override fun showProgressBar(isLoading: Boolean) {
-        progressDialog.visibility = if (isLoading) View.VISIBLE else View.GONE
+        progressDialog.isVisible = isLoading
     }
 
     override fun showError(errorMessage: String) {
