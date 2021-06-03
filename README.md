@@ -19,3 +19,8 @@ The following technologies are used:
 Operators are used to give control on and manipulating the emitted observables.
 - Retrofit library used to privde esay way to make api requests.
 - Glide library to help in doing image processing and image manipulation.
+
+Preview
+--
+
+![Animated GIF-downsized_large](https://user-images.githubusercontent.com/34028187/120629622-49468a00-c466-11eb-966c-a1872c2e6cf3.gif)
